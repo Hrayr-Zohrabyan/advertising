@@ -1,0 +1,25 @@
+<html>
+<head>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">
+    </script>
+
+    <script type="text/javascript">
+      $.post({
+        url: 'http://localhost:3030/users/login',
+        headers: {"projectId": "test"}, 
+        data: {username: "admin@gmail.com", 
+        password: "admin"}
+      }, function(r) {
+        $('.test').text(r.data.fullName);
+      });
+    </script>
+
+</head>
+<body>
+  <h1>Test</h1>
+  <p class="test"></p>
+</body>
+</html>

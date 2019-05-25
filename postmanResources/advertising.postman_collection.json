@@ -1,0 +1,1822 @@
+{
+	"info": {
+		"_postman_id": "90ec97fc-e2af-43a6-a454-5aae52adce41",
+		"name": "Tailors",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "First run installation (Set CEO, Set Admin area users permissions, ....)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"test@test.com\",\n\t\"password\": \"test123\",\n\t\"fullName\": \"Hayk Zohrabyan\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/install",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"install"
+					]
+				},
+				"description": "Sets the API owner"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit roles",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{CEO Token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"role\": \"user\",\n\t\"permissions\": [\"ADD_PROJECT\", \"VIEW_PROJECTS\", \"VIEW_PROJECT_OPTIONS\", \"EDIT_PROJECT\"]\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/roles",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"roles"
+					]
+				},
+				"description": "Sets the API owner"
+			},
+			"response": []
+		},
+		{
+			"name": "Login as CEO",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "491f4272-86ab-40d2-a0a7-1e60fbf647ad",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9e98f559-75d3-4643-a408-38384ef8d53e",
+						"exec": [
+							"pm.environment.set(\"CEO Token\", JSON.parse(responseBody).data.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"test@test.com\",\n\t\"password\": \"test123\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/auth/login",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register as admin user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9476f6a5-6e6d-4555-a01f-87d5094e4e48",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"test@test123.com\",\n\t\"password\": \"test123\",\n\t\"fullName\": \"Hayk Zohrabyan\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/auth/register",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"auth",
+						"register"
+					]
+				},
+				"description": "Sets the API owner"
+			},
+			"response": []
+		},
+		{
+			"name": "Login as Admin user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b4aa08f-313a-4eb9-a191-c0f6b1d2bc1c",
+						"exec": [
+							"pm.environment.set(\"Admin User Token\", JSON.parse(responseBody).data.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"test@test123.com\",\n\t\"password\": \"test123\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/auth/login",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab6ecc9e-68d5-4d16-abc1-c7ed5761e1ad",
+						"exec": [
+							"pm.environment.set(\"projectId\", JSON.parse(responseBody).data.project.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Admin User Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"floweria\",\n\t\"email\": \"floweria@test.com\",\n\t\"active\": true\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/projects",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"projects"
+					]
+				},
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "View Projects",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Admin User Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/projects",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"projects"
+					]
+				},
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit project",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Admin User Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"projectId\": \"SOnBvUQOg\",\n\t\"active\": true\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/projects",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"projects"
+					]
+				},
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "View Project Options",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Admin User Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "4zeVBwnPQ",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/projects/options",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"projects",
+						"options"
+					]
+				},
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Project Options",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Admin User Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"projectId\": \"4zeVBwnPQ\",\n\t\"projectOptions\": {\n\t    \"supplierHasAvailability\": false\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/admin/projects/options",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"admin",
+						"projects",
+						"options"
+					]
+				},
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "Login as project admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "658584e6-7607-4a6e-95d6-e018eff65ee8",
+						"exec": [
+							"pm.environment.set(\"Test Admin Token\", JSON.parse(responseBody).data.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"test@test123.com\",\n\t\"password\": \"test123\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/login",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add category",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"floweriaTypes\",\n    \"photo\": \"http://dominicwilcox.com/gen2/wp-content/uploads/2012/07/gpsshoes.jpg\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/categories",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit category",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"ZMrWw1R-o\",\n\t\"name\": \"floweriaTypes\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/categories",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View categories",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}",
+						"disabled": true
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/categories",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View mainCategory",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}",
+						"disabled": true
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/categories/main",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"categories",
+						"main"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete category",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"categoryId\": \"F4JWAbrnx\",\n\t\"administrationActive\": false\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/categories",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Category Options",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"4jwF0xa68n\",\n    \"categoryOptions\": [\n    \t{\n\t    \t\"properties\": {\n\t\t        \"name\": \"flower 1\",\n\t\t        \"photo\": \"http://rozi.am/wp-content/uploads/2016/11/680.jpg\"\n\t    \t}\n   \t\t},\n    \t{\n\t    \t\"properties\": {\n\t\t        \"name\": \"flower 2\",\n\t\t        \"photo\": \"http://dominicwilcox.com/gen2/wp-content/uploads/2012/07/gpsshoes.jpg\"\n\t    \t}\n   \t\t},\n    \t{\n\t    \t\"properties\": {\n\t\t        \"name\": \"flower 3\",\n\t\t        \"photo\": \"http://dominicwilcox.com/gen2/wp-content/uploads/2012/07/gpsshoes.jpg\"\n\t    \t}\n   \t\t}\n   \t]\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/categories/options",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"categories",
+						"options"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View Roles",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/roles",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"roles"
+					]
+				},
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "Set Roles for Supplier (OPTIONAL)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"role\": \"supplier\",\n\t\"permissions\": [\n\t\t\"EDIT_SELF\",\n\t    \"GET_LISTING\",\n\t    \"ADD_LISTING\",\n\t    \"EDIT_LISTING\",\n\t    \"DELETE_LISTING\",\n\t    \"ADD_CATEGORY\",\n\t    \"EDIT_CATEGORY\",\n\t    \"DELETE_CATEGORY\",\n\t    \"VIEW_ORDER\",\n\t    \"ADD_ORDER\",\n\t    \"CHANGE_ORDER_STATUS\",\n\t    \"SET_ORDER_REVIEW\",\n\t    \"SET_AVAILABILITY\",\n\t    \"CHAT\",\n\t    \"GET_MEDIA\",\n\t    \"POST_MEDIA\"\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/roles",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"roles"
+					]
+				},
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "Set Roles for Consumer (OPTIONAL)",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"role\": \"consumer\",\n\t\"permissions\": [\"EDIT_SELF\", \"GET_LISTING\", \"VIEW_ORDER\", \"ADD_ORDER\", \"CHANGE_ORDER_STATUS\", \"SET_ORDER_REVIEW\", \"SEARCH\", \"CHAT\", \"GET_MEDIA\"]\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/roles",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"roles"
+					]
+				},
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "Register as supplier",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"testsupplier@gmail.com\",\n\t\"password\": \"testsupplier\",\n\t\"userType\": \"supplier\",\n\t\"fullName\": \"Vandam\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/register",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login as supplier",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f3202153-7ce0-4bf4-9401-97d6f67e5194",
+						"exec": [
+							"pm.environment.set(\"Test Supplier Token\", JSON.parse(responseBody).data.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"testsupplier@gmail.com\",\n\t\"password\": \"testsupplier\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/login",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register as consumer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"asd123@asd.com\",\n\t\"password\": \"asdasd\",\n\t\"fullName\": \"consumer asdasd\",\n\t\"userType\": \"consumer\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/register",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login as consumer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "415f9546-9b85-4a6c-b3aa-d0ff435074b7",
+						"exec": [
+							"pm.environment.set(\"Test Consumer Token\", JSON.parse(responseBody).data.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"asd123@asd.com\",\n\t\"password\": \"asdasd\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/login",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				},
+				"description": "Change user details or password"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit user",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"lat\": 13,\n\t\"lon\": 22,\n\t\"address\": \"Ervand Cochar 11\",\n\t\"password\": \"asd\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/edit",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4YVNweWMteEsiLCJwcm9qZWN0SWQiOiJjbVB5eTNfY1UiLCJ1c2VyVHlwZSI6ImNvbnN1bWVyIiwiaWF0IjoxNTU0Mzg0ODE4LCJleHAiOjE1NTY5NzY4MTh9.mUHKqmKh7SYChSyTUSppqphkFVwwQfk9FZUY9YnZESo\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/token",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"token"
+					]
+				},
+				"description": "Change user details or password"
+			},
+			"response": []
+		},
+		{
+			"name": "User manual activate/deactivate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Admin Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userId\": \"8aSpyc-xK\",\n\t\"active\": true\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/manualActivate",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"manualActivate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add listing",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"koshik 2 flower 3 flower 1\",\n    \"photo\": \"https://www.planetorganic.com/images/products/medium/1918.jpg\",\n    \"tags\": [\n        {\n            \"id\": \"bnDH18s0UH\",\n            \"name\": \"koshik2\"\n        },\n        {\n            \"id\": \"Xv_G1B9EIb\",\n            \"name\": \"flower3\"\n        },\n        {\n            \"id\": \"l1FGGWk9l\",\n            \"name\": \"flower1\"\n        }\n    ],\n    \"price\": 44,\n    \"isRecurring\": true,\n    \"listingDate\": \"2019-05-03T14:37:50Z\",\n    \"recurringCycle\": \"daily\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/listings",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"listings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit listing",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"_lj3HPdpz\",\n    \"name\": \"koshik 1 flower 1\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/listings",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"listings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete listing",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"Lg_JLUALh\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/listings",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"listings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single listing supplier",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/listings/2A6q65ihL",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"listings",
+						"2A6q65ihL"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single listing consumer",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/listings/2A6q65ihL",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"listings",
+						"2A6q65ihL"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get supplier listings by Customer",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/listings?supplierId=1Pj5F85Zr",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"listings"
+					],
+					"query": [
+						{
+							"key": "supplierId",
+							"value": "1Pj5F85Zr"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get own listings",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/listings",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"listings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search User",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/search/user?query=SD",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"search",
+						"user"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "offset",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "date",
+							"value": "2018-09-04T11:50:50Z",
+							"disabled": true
+						},
+						{
+							"key": "query",
+							"value": "SD"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Listing",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/search/listing?query={\"options\":[\"99ubVJJlh\",\"l1FGGWk9l\"],\"listingName\":\"\"}",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"search",
+						"listing"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "{\"options\":[\"99ubVJJlh\",\"l1FGGWk9l\"],\"listingName\":\"\"}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Listing suggestions",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/search/listing/suggestions?query=koshik1",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"search",
+						"listing",
+						"suggestions"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "koshik1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Listing by Tag",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/search/tag/u8ke35PKu?",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"search",
+						"tag",
+						"u8ke35PKu"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10",
+							"disabled": true
+						},
+						{
+							"key": "offset",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "date",
+							"value": "16/2019/15:15:42",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"listings\": [{\"listingId\": \"MlAH4G1vW\", \"quantity\": 1}],\n\t\"orderDate\": \"2018-09-04T10:50:50Z\",\n\t\"orderPersons\": 2\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/orders",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "View orders",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/orders?",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"orders"
+					],
+					"query": [
+						{
+							"key": "project",
+							"value": "test",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change order status",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"orderId\": \"YpWWOXgY-\",\n\t\"status\": \"completed\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/orders/status",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"orders",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set availability",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"monday\": {\n\t\t\"active\": true,\n\t\t\"hours\": {\n\t\t\t\"start\": \"05:00\",\n\t\t\t\"end\": \"20:00\"\n\t\t}\n\t}, \n\t\"tuesday\": {\n\t\t\"active\": true,\n\t\t\"hours\": {\n\t\t\t\"start\": \"12:00\",\n\t\t\t\"end\": \"16:00\"\n\t\t}\n\t}, \n\t\"friday\": {\n\t\t\"active\": true,\n\t\t\"hours\": {\n\t\t\t\"start\": \"16:00\",\n\t\t\t\"end\": \"22:00\"\n\t\t}\n\t}\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/availability",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"availability"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set availability exclusion",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"exclusions\": [\n\t\t\"2018-08-30T17:24:50Z\"\n\t]\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/users/availability/exclusion",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"users",
+						"availability",
+						"exclusion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set order rating and review",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}",
+						"disabled": true
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"orderId\": \"YpWWOXgY-\",\n\t\"rating\": 5,\n\t\"review\": \"T3est\"\n}"
+				},
+				"url": {
+					"raw": "{{Real URL}}/orders/review",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"orders",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single chat",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/chats/_6LfRZcTA",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"chats",
+						"_6LfRZcTA"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user chats",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/chats",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"chats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get media",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Supplier Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/media/9HJlOzysI?width=300",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"media",
+						"9HJlOzysI"
+					],
+					"query": [
+						{
+							"key": "width",
+							"value": "300"
+						},
+						{
+							"key": "height",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "date",
+							"value": "2018-09-04T11:50:50Z",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload media",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "projectId",
+						"value": "{{projectId}}"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Test Consumer Token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{Real URL}}/media?",
+					"host": [
+						"{{Real URL}}"
+					],
+					"path": [
+						"media"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "offset",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "date",
+							"value": "2018-09-04T11:50:50Z",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
